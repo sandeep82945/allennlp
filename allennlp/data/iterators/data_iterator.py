@@ -88,7 +88,7 @@ class DataIterator(Registrable):
     def __call__(self,
                  instances: Iterable[Instance],
                  num_epochs: int = None,
-                 shuffle: bool = True) -> Iterator[TensorDict]:
+                 shuffle: bool = False) -> Iterator[TensorDict]:
         """
         Returns a generator that yields batches over the given dataset
         for the given number of epochs. If ``num_epochs`` is not specified,
