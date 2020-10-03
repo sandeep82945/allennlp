@@ -118,11 +118,6 @@ class BucketIterator(DataIterator):
     def _create_batches(self, instances: Iterable[Instance], shuffle: bool) -> Iterable[Batch]:
         for instance_list in self._memory_sized_lists(instances):
 
-            instance_list = sort_by_padding(instance_list,
-                                            self._sorting_keys,
-                                            self.vocab,
-                                            self._padding_noise)
-
             batches = []
             excess: Deque[Instance] = deque()
             for batch_instances in lazy_groups_of(iter(instance_list), self._batch_size):
@@ -141,10 +136,7 @@ class BucketIterator(DataIterator):
                 # We'll actually pop the last _two_ batches, because the last one might not be full.
                 last_batch = batches.pop()
                 penultimate_batch = batches.pop()
-            if shuffle:
-                # NOTE: if shuffle is false, the data will still be in a different order
-                # because of the bucket sorting.
-                random.shuffle(batches)
+  
             if move_to_front:
                 batches.insert(0, penultimate_batch)
                 batches.insert(0, last_batch)
